@@ -1,0 +1,40 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    About {{about.user.username}}
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+            <a href="{% url 'user-profile' about.user.id %}" class="btn btn-outline-dark my-3">Go to Profile</a>
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{about.user.username}}</h5>
+                  {% if about.user.is_superuser %}
+                    <h6 class="card-subtitle mb-2 text-muted">Admin</h6>
+                  {% else %}
+                    <h6 class="card-subtitle mb-2 text-muted">User</h6>
+                  {% endif %}
+
+                  <p class="card-text">
+                      First Name: <em>{{about.user.first_name}}</em> <br>
+                      Last Name: <em>{{about.user.last_name}}</em> <br>
+                      Email Name: <em>{{about.user.email}}</em> <br>
+                      Gender: <em>{{about.gender}}</em> <br>
+                      Age: <em>{{about.age}}</em> <br>
+                      Contact Number: <em>{{about.contact_number}}</em> <br>
+                      Description: <em>{{about.description}}</em> <br>
+                      Account Created: <em>{{about.created}}</em> <br>
+                  </p>
+
+                  <a href="{% url 'edit-about-user' about.user.id %}" class="btn btn-outline-dark">Edit About</a>
+                  <a href="{% url 'edit-profile' about.user.id %}" class="btn btn-outline-dark">Edit Profile</a>
+
+                </div>
+              </div>
+        </div>
+    </div>
+
+{% endblock content %}

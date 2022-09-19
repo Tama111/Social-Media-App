@@ -1,0 +1,40 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Comment Likers
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+
+            <h3>Comment Liked By</h3>
+            <table class="table table-hover text-center">
+                <thead>
+                  <tr>
+                    <th scope="col">SL.No.</th>
+                    <th scope="col">Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for liker in comment_likers %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>
+                                <a href="{% url 'user-profile' liker.liked_by.id %}" style="text-decoration: none; color: black;">
+                                    <strong>
+                                        {{liker.liked_by.username}}
+                                    </strong>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                  
+                </tbody>
+              </table>
+
+        </div>
+    </div>
+
+{% endblock content %}

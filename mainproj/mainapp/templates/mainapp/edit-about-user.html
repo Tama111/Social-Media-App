@@ -1,0 +1,17 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Edit About {{about.user.username}}
+{% endblock title %}
+
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+            {% include 'mainapp/form-structure.html' with value="Save" title="Edit" %}
+            <a href="{% url 'about-user' %}" class="btn btn-outline-dark">Cancel</a>
+        </div>
+    </div>
+
+{% endblock content %}

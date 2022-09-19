@@ -1,0 +1,25 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Delete Account
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+            
+            <div class="alert alert-danger">
+                <h1 class="text-start">Delete Account</h1>
+                <p>Are you sure, you want to delete your account "{{user.username}}"?</p>
+                <form action="" method="POST" novalidate>
+                    {% csrf_token %}
+                    <input type="submit" value="Delete" class="btn btn-outline-danger">
+                    <a href="{% url 'user-profile' user.id %}" class="btn btn-outline-dark">Cancel</a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

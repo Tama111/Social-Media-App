@@ -1,0 +1,62 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Follow
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <h3 class="text-center mt-3">Follow Status</h3>
+        <div class="col-sm-5 my-5">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">SL. No.</th>
+                    <th scope="col">Followers</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for follow in followers %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>
+                                <a href="{% url 'user-profile' follow.follower.id %}" style="text-decoration: none; color: black;">
+                                    <strong>{{follow.follower}}</strong>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <h3 class="alert alert-warning">No Followers</h3>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+
+        <div class="col-sm-5 offset-2 my-5">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">SL. No.</th>
+                    <th scope="col">Followings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for follow in followings %}
+                        <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>
+                                <a href="{% url 'user-profile' follow.following.id %}" style="text-decoration: none; color: black;">
+                                    <strong>{{follow.following}}</strong>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <h3 class="alert alert-warning">No Followings</h3>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+
+{% endblock content %}

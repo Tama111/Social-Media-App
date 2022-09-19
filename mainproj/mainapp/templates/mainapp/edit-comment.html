@@ -1,0 +1,16 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Edit Comment
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+            <a href="{% url 'post-detail' comment.post.id %}" class="btn btn-outline-dark mb-3">See This Post</a>
+            {% include 'mainapp/form-structure.html' with value="Save" title="Edit Comment" %}
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,123 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Search
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+
+            <form>
+
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" 
+                name='search' value="{{search_input}}"> <br><br>
+
+                    <div class="row justify-content-center">
+                        <div class="col-sm-4 text-center">
+                            {% if active_user %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="user" checked>
+                            {% else %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="user">
+                            {% endif %}
+                            <label class="form-check-label" for="">
+                                User
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4 text-center">
+                            {% if active_post_category %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="post-category" checked>
+                            {% else %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="post-category">
+                            {% endif %}
+                            <label class="form-check-label" for="">
+                                Post Category
+                            </label>
+                        </div>
+
+                        <div class="col-sm-4 text-center">
+                            {% if active_post %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="post" checked>
+                            {% else %}
+                                <input class="form-check-input" type="radio" name="search-for" id="" value="post">
+                            {% endif %}
+                            <label class="form-check-label" for="">
+                                Post
+                            </label> 
+                        </div>
+                    </div>
+
+                    <br><br>
+
+                <input type="submit" value="Search" class="btn btn-outline-success">
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+
+            <div class="row">
+
+                {% if active_post or active_post_category %}
+
+                    {% for post in posts %}
+                        <div class="col-sm-6 mb-3">
+                            <div class="card shadow p-3 mb-5 bg-body rounded">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'post-detail' post.id %}" style="text-decoration: none; color: black;">
+                                            {{post.post_title}}
+                                        </a>
+                                    </h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{post.post_category}}</h6>
+                                    <p class="card-text">
+                                        {{post.post_content|truncatechars:150}}
+                                        <a href="{% url 'post-detail' post.id %}" class="card-link">Read More</a>
+                                    </p>
+                                    <p class="text-end">
+                                        <em>
+                                            <strong>
+                                                <a href="{% url 'user-profile' post.posted_by.id %}" style="text-decoration: none; color: black;">
+                                                    {{post.posted_by.username}}
+                                                </a>
+                                            </strong> <br>
+                                            {{post.post_created}}
+                                        </em>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+                {% if active_user %}
+
+                    {% for user, about in users.items %}
+                        <div class="col-sm-6 mb-3">
+                            <div class="card shadow p-3 mb-5 bg-body rounded">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'user-profile' user.id %}" style="text-decoration: none; color: black;">
+                                            {{user.username}}
+                                        </a>
+                                    </h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{user.first_name}} {{user.last_name}}</h6>
+                                </div>
+                                <p class="card-text">{{about.description|truncatechars:150}}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

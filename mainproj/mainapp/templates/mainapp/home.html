@@ -1,0 +1,288 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Home
+{% endblock title %}
+
+{% block css %}
+<style>
+    textarea{
+        resize: none;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+
+        <div class="col-sm-3 my-5">
+
+            <!-- Filters -->
+            <form action="" method="GET" novalidate>
+
+                <label for="">Post:</label>
+                <input type="search" name="post-name" id="" value="{{post_name_input}}" placeholder="Search" class="form-control">
+
+                <label for="">Post Category:</label>
+                <select class="form-select" aria-label="Default select example" name="post-category">
+                    <option selected>{{post_category_input}}</option>
+                    {% for cat in post_categories %}
+                        {% if post_category_input != cat %}
+                            <option value="{{cat}}">{{cat}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    <option value="">All</option>
+                </select>
+
+                <label for="">Month:</label>
+                <select class="form-select" aria-label="Default select example" name="post-month">
+
+                    {% if post_month_input == 13 %}
+                        <option value="" selected></option>
+                    {% else %}
+                        <option value="">All</option>
+                    {% endif %}
+
+                    {% if post_month_input == 1 %}
+                        <option value="1" selected>January</option>
+                    {% else %}
+                        <option value="1">January</option>
+                    {% endif %}
+
+                    {% if post_month_input == 2 %}
+                        <option value="2" selected>February</option>
+                    {% else %}
+                    <option value="2">February</option>
+                    {% endif %}
+                        
+                    {% if post_month_input == 3 %}
+                        <option value="3" selected>March</option>
+                    {% else %}
+                        <option value="3">March</option>
+                    {% endif %}
+
+                    {% if post_month_input == 4 %}
+                        <option value="4" selected>April</option>
+                    {% else %}
+                        <option value="4">April</option>
+                    {% endif %}
+
+                    {% if post_month_input == 5 %}
+                        <option value="5" selected>May</option>
+                    {% else %}
+                        <option value="5">May</option>
+                    {% endif %}
+
+                    {% if post_month_input == 6 %}
+                        <option value="6" selected>June</option>
+                    {% else %}
+                        <option value="6">June</option>
+                    {% endif %}
+
+                    {% if post_month_input == 7 %}
+                        <option value="7" selected>July</option>
+                    {% else %}
+                        <option value="7">July</option>
+                    {% endif %}
+
+                    {% if post_month_input == 8 %}
+                        <option value="8" selected>August</option>
+                    {% else %}
+                        <option value="8">August</option>
+                    {% endif %}
+
+                    {% if post_month_input == 9 %}
+                        <option value="9" selected>September</option>
+                    {% else %}
+                        <option value="9">September</option>
+                    {% endif %}
+
+                    {% if post_month_input == 10 %}
+                        <option value="10" selected>October</option>
+                    {% else %}
+                        <option value="10">October</option>
+                    {% endif %}
+
+                    {% if post_month_input == 11 %}
+                        <option value="11" selected>November</option>
+                    {% else %}
+                        <option value="11">November</option>
+                    {% endif %}
+
+                    {% if post_month_input == 12 %}
+                        <option value="12" selected>December</option>
+                    {% else %}
+                        <option value="12">December</option>
+                    {% endif %}
+
+                </select>
+
+                <label for="">Year:</label>
+                <select class="form-select" aria-label="Default select example" name="post-year">
+                    <option value="{{post_year_input}}" selected>{{post_year_input}}</option>
+                    {% for year in years %}
+                        {% if post_year_input != year %}
+                            <option value="{{year}}">{{year}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if post_year_input != '' %}
+                        <option value="">All</option>
+                    {% endif %}
+                </select>
+
+
+                <br>
+                <input type="submit" value="Search" class="btn btn-outline-success">
+                <a href="{% url 'home' %}" class="btn btn-outline-dark">Reset All</a>
+            </form>
+
+        </div>
+
+
+        <div class="col-sm-6 offset-1 my-5">
+
+            <h1>All Posts</h1>
+            {% for post, post_info in all_posts.items %}
+
+                <!-- Show Posts -->
+                <div class="card mt-5 shadow p-3 mb-5 bg-body rounded">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{{post.post_title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{post.post_category}}</h6>
+                        <p class="card-text">
+                            {{post.post_content|truncatechars:150}}
+                            <a href="{% url 'post-detail' post.id %}" class="card-link">Read More</a>
+                        </p>
+                        <p class="card-text text-end">
+                            <em>
+                                <a href="{% url 'user-profile' post.posted_by.id %}" style="text-decoration: none; color: black;">
+                                    <strong>{{post.posted_by.username}}</strong>
+                                </a> <br>
+                                {{post.post_created}}
+                            </em>
+                        </p>
+
+                        <!-- Like Post -->
+                        <form action="" method="POST" novalidate>
+                            {% csrf_token %}
+                            {% if post_info.like_status %}
+                                <input type="hidden" name="post-like" value="like-{{post.id}}">
+                                <input type="submit" value="Like" class="btn btn-outline-danger">
+                            {% else %}
+                                <input type="hidden" name="post-like" value="unlike-{{post.id}}">
+                                <input type="submit" value="Liked !!!" class="btn btn-danger">
+                            {% endif %}
+                        </form>
+                        
+                        <p>
+                            <a href="{% url 'post-likers' post.id %}" style="text-decoration: none; color: black;">
+                                <strong>Likes: {{post_info.total_likes}}</strong>
+                            </a>
+                        </p>
+
+                        <!-- Save Post -->
+                        <form action="" method="POST" class="text-end">
+                            {% csrf_token %}
+                            {% if post_info.save_status %}
+                                <input type="hidden" name="post-save" value="save-{{post.id}}">
+                                <input type="submit" value="Save" class="btn btn-outline-dark">
+                            {% else %}
+                                <input type="hidden" name="post-save" value="unsave-{{post.id}}">
+                                <input type="submit" value="Saved!!!" class="btn btn-dark">
+                            {% endif %}
+                        </form>
+
+                        <hr><hr><hr>
+
+                        <!-- Write Comments -->
+                        <form class="row" method="POST">
+                            {% csrf_token %}
+                            <div class="col">
+                                <input type="hidden" name="post-comment-id" value="{{post.id}}">
+                                <textarea name="post-comment" id="" cols="" rows="2" class="form-control" placeholder="Comment"></textarea>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Comment</button>
+                            </div>
+                        </form>
+
+                        <!-- Showing Comments -->
+
+                        <p class="mt-3">
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                              Show Comments
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item active" aria-current="true">Comments</li>
+                                    {% for comment, comment_info in post_info.comments.items %}
+                                        <li class="list-group-item">
+                                            <strong>
+                                                <a href="{% url 'user-profile' comment.comment_by.id %}" style="text-decoration: none; color: black;">
+                                                    {{comment.comment_by.username}}
+                                                </a>
+                                            </strong> <br>
+                                             {{comment.comment}}
+                                             <p class="text-end">
+                                                 <em>{{comment.created}}</em>
+                                             </p>
+
+                                            {% if request.user.id == comment.comment_by.id %}
+                                                <p>
+                                                    <div class="d-inline">
+                                                        <a href="{% url 'edit-comment' comment.id %}" class="btn btn-outline-warning btn-sm">
+                                                            Edit
+                                                        </a>
+                                                    </div>
+                                                    <div class="d-inline">
+                                                        <form action="" method="POST">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="delete-comment" value="{{comment.id}}">
+                                                            <input type="submit" value="Delete" class="btn btn-outline-danger btn-sm">
+                                                        </form>
+                                                    </div>
+                                                </p>
+                                            {% endif %}
+
+                                            <form action="" method="POST" class="text-end">
+                                                {% csrf_token %}
+                                                {% if comment_info.comment_status %}
+                                                    <input type="hidden" name="comment-like" value="like-{{comment.id}}">
+                                                    <input type="submit" value="Like" class="btn btn-outline-danger">
+                                                {% else %}
+                                                    <input type="hidden" name="comment-like" value="unlike-{{comment.id}}">
+                                                    <input type="submit" value="Liked!!!" class="btn btn-danger">
+                                                {% endif %}
+                                            </form>
+                                            <p class="text-end">
+                                                <a href="{% url 'comment-likers' comment.id %}" style="text-decoration: none; color: black;">
+                                                    <strong>
+                                                        Likes: {{comment_info.comment_like}}
+                                                    </strong>
+                                                </a>
+                                            </p>
+
+                                        </li>
+
+                                    {% endfor %}
+                                </ul>
+                                
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            {% empty %}
+                <h3 class="alert alert-warning">Follow more to see more posts.</h3>
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock content %}
+

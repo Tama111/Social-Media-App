@@ -1,0 +1,16 @@
+{% extends 'mainapp/main.html' %}
+
+{% block title %}
+    Edit {{user.username}}
+{% endblock title %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6 my-5">
+            {% include 'mainapp/form-structure.html' with value="Save" title="Edit Profile" %}
+            <a href="{% url 'user-profile' request.user.id %}" class="btn btn-outline-dark">Cancel</a>
+        </div>
+    </div>
+
+{% endblock content %}
